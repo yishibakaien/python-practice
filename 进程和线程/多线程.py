@@ -1,6 +1,7 @@
 
 import time, threading
 
+# 启动一个线程就是把一个函数传入并创建Thread实例，然后调用start()开始执行：
 # 新线程执行代码：
 def loop():
     print('thread %s is running...' % threading.current_thread().name)
@@ -12,11 +13,22 @@ def loop():
     print('thread %s ended.' % threading.current_thread().name)
 
 print('thread %s is running...' % threading.current_thread().name)
+# => thread MainThread is running... 可以看出默认主线程 名叫 MainThread ?
 
 t = threading.Thread(target = loop, name = 'LoopThread')
 t.start()
 t.join()
 print('thread %s ended.' % threading.current_thread().name)
+# thread MainThread is running...
+# thread LoopThread is running...
+# thread LoopThread >>> 1
+# thread LoopThread >>> 2
+# thread LoopThread >>> 3
+# thread LoopThread >>> 4
+# thread LoopThread >>> 5
+# thread LoopThread ended.
+# thread MainThread ended.
+
 
 # Lock
 
@@ -42,8 +54,9 @@ t1.join()
 t2.join()
 
 print(balance)
+
 # 可见打印的结果不一定是 0
-# 是因为修改balance需要多条语句，t1 和t2 是交替运行的
+# 是因为修改balance需要多条语句， t1 和 t2 是交替运行的
 # 而执行这几条语句时，线程可能中断，从而导致多个线程把同一个对象的内容改乱了。
 
 
@@ -61,4 +74,3 @@ def run_thread(n):
             change_it(n)
         finally:
             lock.release()
-            
